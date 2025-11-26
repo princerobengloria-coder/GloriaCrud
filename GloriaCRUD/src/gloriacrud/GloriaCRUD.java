@@ -4,6 +4,8 @@
  */
 package gloriacrud;
 
+import java.awt.Dimension;
+
 /**
  *
  * @author Student
@@ -15,6 +17,14 @@ public class GloriaCRUD {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        boolean isVisible = true;
+        int maxSizeLF[] = new int[2];
+        maxSizeLF[0] = 403;
+        maxSizeLF[1] = 182;
+        LogInForm lf = new LogInForm();
+        lf.setMaximumSize(new Dimension(maxSizeLF[0], maxSizeLF[1]));
+        
+        lf.setVisible(isVisible);
     }
     
 }
