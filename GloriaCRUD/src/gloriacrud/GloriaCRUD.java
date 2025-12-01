@@ -22,9 +22,10 @@ public class GloriaCRUD {
         maxSizeLF[0] = 403;
         maxSizeLF[1] = 182;
         LogInForm lf = new LogInForm();
+        UserMaintenance um = new UserMaintenance();
         lf.setMaximumSize(new Dimension(maxSizeLF[0], maxSizeLF[1]));
         
-        lf.setVisible(isVisible);
+        um.setVisible(isVisible);
     }
     
 }
