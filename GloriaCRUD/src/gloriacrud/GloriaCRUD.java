@@ -1,15 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package gloriacrud;
 
 import java.awt.Dimension;
+import java.sql.*;
 
-/**
- *
- * @author Student
- */
 public class GloriaCRUD {
 
     /**
@@ -24,6 +17,7 @@ public class GloriaCRUD {
         LogInForm lf = new LogInForm();
         UserMaintenance um = new UserMaintenance();
         lf.setMaximumSize(new Dimension(maxSizeLF[0], maxSizeLF[1]));
+        Connection sqlConnect = SQLConnector.getConnection();
         
         um.setVisible(isVisible);
     }

@@ -45,7 +45,7 @@ public class LogInForm extends javax.swing.JFrame {
         label_title.setForeground(new java.awt.Color(243, 243, 243));
         label_title.setText("Log-in Form");
 
-        panel_username.setBackground(new java.awt.Color(40, 40, 40));
+        panel_username.setBackground(new java.awt.Color(30, 30, 30));
 
         label_username.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         label_username.setForeground(new java.awt.Color(243, 243, 243));
@@ -74,7 +74,7 @@ public class LogInForm extends javax.swing.JFrame {
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
-        panel_password.setBackground(new java.awt.Color(40, 40, 40));
+        panel_password.setBackground(new java.awt.Color(30, 30, 30));
         panel_password.setPreferredSize(new java.awt.Dimension(245, 40));
 
         label_password.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -207,12 +207,6 @@ public class LogInForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel label_password;
     private javax.swing.JLabel label_title;
     private javax.swing.JLabel label_username;
