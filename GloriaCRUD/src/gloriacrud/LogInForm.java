@@ -4,6 +4,9 @@
  */
 package gloriacrud;
 
+import java.sql.*;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Student
@@ -34,7 +37,7 @@ public class LogInForm extends javax.swing.JFrame {
         panel_password = new javax.swing.JPanel();
         label_password = new javax.swing.JLabel();
         pf_password = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        btn_login = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(27, 27, 27));
@@ -104,13 +107,13 @@ public class LogInForm extends javax.swing.JFrame {
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
-        jButton1.setBackground(new java.awt.Color(51, 153, 255));
-        jButton1.setForeground(new java.awt.Color(249, 249, 249));
-        jButton1.setText("Log-in");
-        jButton1.setBorderPainted(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_login.setBackground(new java.awt.Color(51, 153, 255));
+        btn_login.setForeground(new java.awt.Color(249, 249, 249));
+        btn_login.setText("Log-in");
+        btn_login.setBorderPainted(false);
+        btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_loginActionPerformed(evt);
             }
         });
 
@@ -120,7 +123,7 @@ public class LogInForm extends javax.swing.JFrame {
             panel_motherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_motherLayout.createSequentialGroup()
                 .addContainerGap(325, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(btn_login)
                 .addContainerGap())
             .addGroup(panel_motherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel_motherLayout.createSequentialGroup()
@@ -136,9 +139,9 @@ public class LogInForm extends javax.swing.JFrame {
         panel_motherLayout.setVerticalGroup(
             panel_motherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_motherLayout.createSequentialGroup()
-                .addContainerGap(144, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(144, 144, 144)
+                .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16))
             .addGroup(panel_motherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel_motherLayout.createSequentialGroup()
                     .addContainerGap()
@@ -147,7 +150,7 @@ public class LogInForm extends javax.swing.JFrame {
                     .addComponent(panel_username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(panel_password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(52, Short.MAX_VALUE)))
+                    .addContainerGap(62, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,9 +169,33 @@ public class LogInForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        String user = tf_username.getText();
+        String pass = pf_password.getText();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try{
+            Connection connection = SQLConnector.getConnection();
+//            Statement st = connection.createStatement();
+            String select_query = String.format("SELECT * FROM user WHERE userName = ? AND userPassword = ?");
+            preparedStatement = connection.prepareStatement(select_query);
+            preparedStatement.setString(1, user);
+            preparedStatement.setString(2, pass);
+            resultSet = preparedStatement.executeQuery();
+            
+            if(resultSet.next()){
+                this.dispose();
+                UserMaintenance um = new UserMaintenance();
+                um.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(null, "Error: Invalid Username and/or Password");
+            }
+        }catch(SQLException e){
+           JOptionPane.showMessageDialog(null, "Error" + e);
+            
+        }
+    }//GEN-LAST:event_btn_loginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -206,7 +233,7 @@ public class LogInForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btn_login;
     private javax.swing.JLabel label_password;
     private javax.swing.JLabel label_title;
     private javax.swing.JLabel label_username;

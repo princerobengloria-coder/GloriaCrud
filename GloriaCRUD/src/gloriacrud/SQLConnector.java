@@ -13,7 +13,7 @@ public class SQLConnector {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USER, PASS);
-            JOptionPane.showMessageDialog(null, "Connected");
+//            JOptionPane.showMessageDialog(null, "Connected");
         }catch(ClassNotFoundException | SQLException err){
             JOptionPane.showMessageDialog(null, "Error in connection: " + err);
         }

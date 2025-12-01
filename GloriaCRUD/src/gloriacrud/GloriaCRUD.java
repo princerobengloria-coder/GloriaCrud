@@ -10,6 +10,7 @@ public class GloriaCRUD {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Connection sqlConnect = SQLConnector.getConnection();
         boolean isVisible = true;
         int maxSizeLF[] = new int[2];
         maxSizeLF[0] = 403;
@@ -17,9 +18,8 @@ public class GloriaCRUD {
         LogInForm lf = new LogInForm();
         UserMaintenance um = new UserMaintenance();
         lf.setMaximumSize(new Dimension(maxSizeLF[0], maxSizeLF[1]));
-        Connection sqlConnect = SQLConnector.getConnection();
         
-        um.setVisible(isVisible);
+        lf.setVisible(isVisible);
     }
     
 }
