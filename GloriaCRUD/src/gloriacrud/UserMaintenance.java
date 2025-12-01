@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package gloriacrud;
-
+import java.sql.*;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Student
@@ -15,6 +18,37 @@ public class UserMaintenance extends javax.swing.JFrame {
      */
     public UserMaintenance() {
         initComponents();
+        loadUserTable();
+    }
+    
+    public void loadUserTable(){
+        int colCount = 0;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        ResultSetMetaData resultSetMetaData = null;
+        DefaultTableModel userModel = (DefaultTableModel)tbl_users.getModel();
+        try{
+            Connection connection = SQLConnector.getConnection();
+            String insert_query = String.format("SELECT * FROM user");
+            preparedStatement = connection.prepareStatement(insert_query);
+            resultSet = preparedStatement.executeQuery();
+            resultSetMetaData = resultSet.getMetaData();
+            colCount = resultSetMetaData.getColumnCount();
+            userModel.setRowCount(0);
+            
+            while(resultSet.next()){
+                Vector colData = new Vector();
+                for(int i = 1; i <= colCount; i++){
+                    colData.add(resultSet.getString("userID"));
+                    colData.add(resultSet.getString("userName"));
+                    colData.add(resultSet.getString("userPassword"));
+                    colData.add(resultSet.getString("userLevel"));
+                }
+                userModel.addRow(colData);
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
 
     /**
@@ -237,7 +271,7 @@ public class UserMaintenance extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "userID", "userName", "userPassword", "userLevel"
             }
         ));
         tbl_users.setCellSelectionEnabled(true);

@@ -54,7 +54,11 @@ public class LogInForm extends javax.swing.JFrame {
         label_username.setForeground(new java.awt.Color(243, 243, 243));
         label_username.setText("Enter Username:");
 
-        tf_username.setText("JonDoe123");
+        tf_username.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tf_usernameActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_usernameLayout = new javax.swing.GroupLayout(panel_username);
         panel_username.setLayout(panel_usernameLayout);
@@ -84,7 +88,11 @@ public class LogInForm extends javax.swing.JFrame {
         label_password.setForeground(new java.awt.Color(243, 243, 243));
         label_password.setText("Enter Password:");
 
-        pf_password.setText("jPasswordField1");
+        pf_password.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pf_passwordActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_passwordLayout = new javax.swing.GroupLayout(panel_password);
         panel_password.setLayout(panel_passwordLayout);
@@ -196,6 +204,14 @@ public class LogInForm extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_btn_loginActionPerformed
+
+    private void tf_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_usernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_usernameActionPerformed
+
+    private void pf_passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pf_passwordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pf_passwordActionPerformed
 
     /**
      * @param args the command line arguments

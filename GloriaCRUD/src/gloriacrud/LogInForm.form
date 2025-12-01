@@ -148,9 +148,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="tf_username">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="JonDoe123"/>
-              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tf_usernameActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -202,9 +202,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JPasswordField" name="pf_password">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pf_passwordActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
