@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package gloriacrud;
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.util.Vector;
 import javax.swing.JOptionPane;
@@ -29,8 +30,8 @@ public class UserMaintenance extends javax.swing.JFrame {
         DefaultTableModel userModel = (DefaultTableModel)tbl_users.getModel();
         try{
             Connection connection = SQLConnector.getConnection();
-            String insert_query = String.format("SELECT * FROM user");
-            preparedStatement = connection.prepareStatement(insert_query);
+            String load_users_query = String.format("SELECT * FROM user");
+            preparedStatement = connection.prepareStatement(load_users_query);
             resultSet = preparedStatement.executeQuery();
             resultSetMetaData = resultSet.getMetaData();
             colCount = resultSetMetaData.getColumnCount();
@@ -73,7 +74,7 @@ public class UserMaintenance extends javax.swing.JFrame {
         pf_confirm = new javax.swing.JPasswordField();
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        tf_userlevel = new javax.swing.JTextField();
+        cbox_userlevel = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         tf_search = new javax.swing.JTextField();
@@ -103,7 +104,7 @@ public class UserMaintenance extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(242, 242, 242));
         jLabel2.setText("Enter Username:");
 
-        tf_username.setText("JonDoe");
+        tf_username.setEnabled(false);
         tf_username.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tf_usernameActionPerformed(evt);
@@ -118,7 +119,7 @@ public class UserMaintenance extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(tf_username, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addComponent(tf_username)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -139,7 +140,7 @@ public class UserMaintenance extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(242, 242, 242));
         jLabel3.setText("Enter Password:");
 
-        pf_password.setText("jPasswordField2");
+        pf_password.setEnabled(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -168,7 +169,7 @@ public class UserMaintenance extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(242, 242, 242));
         jLabel4.setText("Confirm Password:");
 
-        pf_confirm.setText("jPasswordField1");
+        pf_confirm.setEnabled(false);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -197,12 +198,7 @@ public class UserMaintenance extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(242, 242, 242));
         jLabel5.setText("Enter User Level:");
 
-        tf_userlevel.setText("JonDoe");
-        tf_userlevel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tf_userlevelActionPerformed(evt);
-            }
-        });
+        cbox_userlevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Guess", "Anon", "Emperor" }));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -212,18 +208,16 @@ public class UserMaintenance extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(tf_userlevel)
+                .addComponent(cbox_userlevel, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(tf_userlevel)
-                        .addGap(1, 1, 1))
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                    .addComponent(cbox_userlevel))
                 .addGap(10, 10, 10))
         );
 
@@ -233,10 +227,25 @@ public class UserMaintenance extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(242, 242, 242));
         jLabel6.setText("Search Username");
 
-        tf_search.setText("JonDoe");
+        tf_search.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_searchFocusGained(evt);
+            }
+        });
         tf_search.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tf_searchActionPerformed(evt);
+            }
+        });
+        tf_search.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tf_searchKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tf_searchKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tf_searchKeyTyped(evt);
             }
         });
 
@@ -289,6 +298,7 @@ public class UserMaintenance extends javax.swing.JFrame {
         });
 
         btn_update.setText("Update");
+        btn_update.setEnabled(false);
         btn_update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_updateActionPerformed(evt);
@@ -296,6 +306,7 @@ public class UserMaintenance extends javax.swing.JFrame {
         });
 
         btn_delete.setText("Delete");
+        btn_delete.setEnabled(false);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -324,8 +335,19 @@ public class UserMaintenance extends javax.swing.JFrame {
         jPanel9.setBackground(new java.awt.Color(30, 30, 30));
 
         btn_save.setText("Save");
+        btn_save.setEnabled(false);
+        btn_save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_saveActionPerformed(evt);
+            }
+        });
 
         btn_close.setText("Close");
+        btn_close.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_closeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -393,24 +415,25 @@ public class UserMaintenance extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(16, 16, 16))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(29, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(16, 16, 16))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -431,21 +454,140 @@ public class UserMaintenance extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tf_usernameActionPerformed
 
-    private void tf_userlevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_userlevelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tf_userlevelActionPerformed
-
     private void tf_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_searchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tf_searchActionPerformed
-
+    public void enable(){
+        tf_username.setEnabled(true);
+        pf_password.setEnabled(true);
+        pf_confirm.setEnabled(true);
+        cbox_userlevel.setEnabled(true);
+    }
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
         // TODO add your handling code here:
+        enable();
+        btn_add.setEnabled(false);
+        btn_save.setEnabled(true);
+        btn_close.setText("Cancel");
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_updateActionPerformed
+
+    // util functions: setting default
+    public void clear_fields(){
+        tf_username.setText("");
+        pf_password.setText("");
+        pf_confirm.setText("");
+        cbox_userlevel.setSelectedIndex(0);
+    }
+    public void disable(){
+        tf_username.setEnabled(false);
+        pf_password.setEnabled(false);
+        pf_confirm.setEnabled(false);
+        cbox_userlevel.setEnabled(false);
+    }
+    public void set_default(){
+        clear_fields();
+        disable();
+        btn_add.setEnabled(true);
+        btn_save.setEnabled(false);
+        btn_close.setText("Close");
+    }
+    private void btn_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_closeActionPerformed
+        // TODO add your handling code here:
+        if(btn_close.getText().equals("Close")){
+            System.exit(0);
+        }else{
+            set_default();
+        }
+    }//GEN-LAST:event_btn_closeActionPerformed
+
+    private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
+        // TODO add your handling code here:
+        PreparedStatement preparedStatement = null;
+        try{
+            Connection connection = SQLConnector.getConnection();
+            String insert_query = String.format("INSERT INTO user(userName, userPassword, userLevel) VALUES(?,?,?)");
+            preparedStatement = connection.prepareStatement(insert_query);
+            preparedStatement.setString(1, tf_username.getText());
+//            preparedStatement.setString(2, pf_password.getText());
+            preparedStatement.setString(2, pf_confirm.getText());
+            preparedStatement.setString(3, cbox_userlevel.getSelectedItem().toString());
+            preparedStatement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Add Successful");
+            set_default();
+            loadUserTable();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btn_saveActionPerformed
+
+    public void search_function(java.awt.event.KeyEvent evt){
+        int colCount = 0;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        ResultSetMetaData resultSetMetaData = null;
+        DefaultTableModel userModel = (DefaultTableModel)tbl_users.getModel();
+        String query_param = "";
+        if(tf_search.getText().equals("") || tf_search.getText().isEmpty() || tf_search.getText().isBlank()){
+            query_param = "";
+            loadUserTable();
+        }else{
+            query_param = tf_search.getText() + "%";
+            loadUserTable();
+        }
+        try{
+            
+            Connection connection = SQLConnector.getConnection();
+            String load_users_query = String.format("SELECT * FROM user WHERE userName LIKE ?");
+            preparedStatement = connection.prepareStatement(load_users_query);
+            preparedStatement.setString(1, query_param);
+            resultSet = preparedStatement.executeQuery();
+            resultSetMetaData = resultSet.getMetaData();
+            colCount = resultSetMetaData.getColumnCount();
+            userModel.setRowCount(0);
+            
+            while(resultSet.next()){
+                Vector colData = new Vector();
+                for(int i = 1; i <= colCount; i++){
+                    colData.add(resultSet.getString("userID"));
+                    colData.add(resultSet.getString("userName"));
+                    colData.add(resultSet.getString("userPassword"));
+                    colData.add(resultSet.getString("userLevel"));
+                }
+                userModel.addRow(colData);
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+        
+        if(tf_search.getText().equals("") || tf_search.getText().isEmpty() || tf_search.getText().isBlank()){
+            loadUserTable();
+        }
+    }
+    private void tf_searchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_searchKeyPressed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tf_searchKeyPressed
+
+    private void tf_searchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_searchKeyTyped
+        // TODO add your handling code here:
+//        System.out.println(tf_search.getText());
+        
+    }//GEN-LAST:event_tf_searchKeyTyped
+
+    private void tf_searchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_searchFocusGained
+        // TODO add your handling code here:
+//        System.out.println(tf_search.getText());
+    }//GEN-LAST:event_tf_searchFocusGained
+
+    private void tf_searchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_searchKeyReleased
+        // TODO add your handling code here:
+//        System.out.println(tf_search.getText());
+        search_function(evt);
+    }//GEN-LAST:event_tf_searchKeyReleased
 
     /**
      * @param args the command line arguments
@@ -488,6 +630,7 @@ public class UserMaintenance extends javax.swing.JFrame {
     private javax.swing.JButton btn_delete;
     private javax.swing.JButton btn_save;
     private javax.swing.JButton btn_update;
+    private javax.swing.JComboBox<String> cbox_userlevel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -508,7 +651,6 @@ public class UserMaintenance extends javax.swing.JFrame {
     private javax.swing.JPasswordField pf_password;
     private javax.swing.JTable tbl_users;
     private javax.swing.JTextField tf_search;
-    private javax.swing.JTextField tf_userlevel;
     private javax.swing.JTextField tf_username;
     // End of variables declaration//GEN-END:variables
 }
