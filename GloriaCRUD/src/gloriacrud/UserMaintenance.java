@@ -284,6 +284,11 @@ public class UserMaintenance extends javax.swing.JFrame {
             }
         ));
         tbl_users.setCellSelectionEnabled(true);
+        tbl_users.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_usersMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_users);
 
         jPanel7.setBackground(new java.awt.Color(26, 26, 26));
@@ -307,6 +312,11 @@ public class UserMaintenance extends javax.swing.JFrame {
 
         btn_delete.setText("Delete");
         btn_delete.setEnabled(false);
+        btn_delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_deleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -466,6 +476,7 @@ public class UserMaintenance extends javax.swing.JFrame {
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
         // TODO add your handling code here:
         enable();
+        btn_update.setEnabled(false);
         btn_add.setEnabled(false);
         btn_save.setEnabled(true);
         btn_close.setText("Cancel");
@@ -473,6 +484,12 @@ public class UserMaintenance extends javax.swing.JFrame {
 
     private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
         // TODO add your handling code here:
+        DefaultTableModel userModel = (DefaultTableModel)tbl_users.getModel();
+        int selected_user_index = tbl_users.getSelectedRow();
+        int userID = Integer.parseInt(userModel.getValueAt(selected_user_index, 0).toString());
+        update_user_function(userID);
+        btn_update.setEnabled(false);
+        disable();
     }//GEN-LAST:event_btn_updateActionPerformed
 
     // util functions: setting default
@@ -495,6 +512,14 @@ public class UserMaintenance extends javax.swing.JFrame {
         btn_save.setEnabled(false);
         btn_close.setText("Close");
     }
+    public void set_update(){
+        enable();
+        
+        btn_add.setEnabled(false);
+        btn_save.setEnabled(true);
+        btn_delete.setEnabled(true);
+        btn_close.setText("Close");
+    }
     private void btn_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_closeActionPerformed
         // TODO add your handling code here:
         if(btn_close.getText().equals("Close")){
@@ -507,7 +532,9 @@ public class UserMaintenance extends javax.swing.JFrame {
     private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
         // TODO add your handling code here:
         PreparedStatement preparedStatement = null;
-        try{
+        if(!btn_update.isEnabled()){
+            btn_update.setEnabled(false);
+            try{
             Connection connection = SQLConnector.getConnection();
             String insert_query = String.format("INSERT INTO user(userName, userPassword, userLevel) VALUES(?,?,?)");
             preparedStatement = connection.prepareStatement(insert_query);
@@ -522,8 +549,56 @@ public class UserMaintenance extends javax.swing.JFrame {
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e);
         }
+        }else if(!btn_add.isEnabled() && btn_update.isEnabled()){
+            DefaultTableModel userModel = (DefaultTableModel)tbl_users.getModel();
+        int selected_user_index = tbl_users.getSelectedRow();
+        int userID = Integer.parseInt(userModel.getValueAt(selected_user_index, 0).toString());
+        update_user_function(userID);
+        }
+        
     }//GEN-LAST:event_btn_saveActionPerformed
 
+    private void update_user_function(int userID) {                                         
+        // TODO add your handling code here:
+        PreparedStatement preparedStatement = null;
+        
+        try{
+            Connection connection = SQLConnector.getConnection();
+            String insert_query = String.format("UPDATE user SET userName = ?, userPassword = ?, userLevel = ? WHERE userID = ?");
+            preparedStatement = connection.prepareStatement(insert_query);
+            preparedStatement.setString(1, tf_username.getText());
+//            preparedStatement.setString(2, pf_password.getText());
+            preparedStatement.setString(2, pf_confirm.getText());
+            preparedStatement.setString(3, cbox_userlevel.getSelectedItem().toString());
+            preparedStatement.setInt(4, userID);
+            preparedStatement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Update Successful");
+            set_default();
+            loadUserTable();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    private void delete_user_function(int userID) {                                         
+        // TODO add your handling code here:
+        PreparedStatement preparedStatement = null;
+        
+        try{
+            Connection connection = SQLConnector.getConnection();
+            
+            String insert_query = String.format("DELETE FROM user WHERE userID = ?;");
+            preparedStatement = connection.prepareStatement(insert_query);
+            preparedStatement.setInt(1, userID);
+            preparedStatement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Delete Successful");
+            set_default();
+            loadUserTable();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
     public void search_function(java.awt.event.KeyEvent evt){
         int colCount = 0;
         PreparedStatement preparedStatement = null;
@@ -588,6 +663,33 @@ public class UserMaintenance extends javax.swing.JFrame {
 //        System.out.println(tf_search.getText());
         search_function(evt);
     }//GEN-LAST:event_tf_searchKeyReleased
+
+    private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
+        // TODO add your handling code here:
+        if(JOptionPane.showConfirmDialog(null, "ARE YOU SURE YOU WANNA DELETE TS?!??!?!", "Confirm Delete", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+            
+        }
+        DefaultTableModel userModel = (DefaultTableModel)tbl_users.getModel();
+        int selected_user_index = tbl_users.getSelectedRow();
+        int userID = Integer.parseInt(userModel.getValueAt(selected_user_index, 0).toString());
+        btn_update.setEnabled(false);
+        disable();
+        delete_user_function(userID);
+        btn_delete.setEnabled(false);
+    }//GEN-LAST:event_btn_deleteActionPerformed
+
+    private void tbl_usersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_usersMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel userModel = (DefaultTableModel)tbl_users.getModel();
+        
+        int selected_user_index = tbl_users.getSelectedRow();
+        
+        tf_username.setText(userModel.getValueAt(selected_user_index, 1).toString());
+        pf_password.setText(userModel.getValueAt(selected_user_index, 2).toString());
+        cbox_userlevel.setSelectedItem(userModel.getValueAt(selected_user_index, 3));
+        btn_update.setEnabled(true);
+        set_update();
+    }//GEN-LAST:event_tbl_usersMouseClicked
 
     /**
      * @param args the command line arguments
